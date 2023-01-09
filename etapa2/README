@@ -1,0 +1,74 @@
+Proiect etapa 2 - POO TV
+
+Name: Arpasanu Emilia-Oana
+Group: 321 CA
+
+The idea
+
+The program is designed to implement an entertainment platform (movie streaming)
+that receives commands as an input and executes them according to the specified
+rules. It consists of a main database which is manipulated by the users' actions
+that take place on the pages they may access.
+
+The structure
+
+The built application follows an extensive class hierarchy that may allow further
+development, highlighting encapsulation, abstractization, polymorphism and
+inheritance. One of the main features is represented by the page hierarchy:
+it is the base of the Visitor pattern that becomes the support of their
+functionality. The user is able to navigate from one page to another according
+to the platform's specifications by memorizing the current page he has accessed.
+Once he has reached the desired page, specific actions may take place if
+the command is valid; these commands manipulate the database used to store the lists
+of users and movies with all their details (consisting of a Singleton pattern).
+The page's utility is obtained by implementing the navigateTo() and use() methods
+specifically for each existing type of page. All pages that construct the platform
+are stored within a Singleton instance of the Application class (and generated
+using the Factory pattern), in order to make the access easier through the program.
+Apart from switching pages and fulfilling their specific actions, the platform's
+database supports additions and removals of movies, at the end of which all users
+are notified (due to the implementation of the Observer pattern; its subject is
+represented by the database and the users become their observers). The notifications
+are sent to a user if he has a subscription to at least of one genres of the movies
+in question. The methods that handle all the exceptions that may occur during
+the program's execution are found within the "validators" package, divided in
+distinct utility classes.
+
+The logic of the program
+
+The entry point of the implementation begins with the retrieval of the JSON input
+data, with the help of the Input class and the main objects' instantiations and
+initializations: the database and the application. Then comes an iteration through
+the actions that take place. There are multiple possible command types: "change page"
+"on page" and "back" ones are applied to the logged-in user's current page
+by calling its methods: access(), that executes the page switch and action(),
+responsible for fulfilling the user's requests. The action of going back to the
+previous pages is possible by storing a stack of completed "change page" instructions,
+in order to make use of the access() method of pages' utilities. The last types
+of commands refer to the movies contained by the platform's database: "add"
+and "delete", which are meant to update the application's information anytime.
+If the actions are executed without any issues, the JSON-formatted output shows the
+current state of the user, along with the available movies (apart from the ones
+that have been purchased, watched, liked or rated) and their queue of notifications;
+otherwise, errors are printed.
+
+Project structure
+
+* src/
+  * checker/ - checker files
+  * databases/ - Database and Application classes
+  * entities/ - Genre, Movie, Notification and User classes
+  * comparators/ - Comparators used for sorting lists of objects
+  * input/ - contains classes used to read data from the JSON files
+  * pages/ - the pages' hierarchy: AuthPage, Login, Logout, Movies, Page (abstract),
+		 Register, SeeDeatils, UnAuthPage, Upgrades 
+		 + PageAccessor (interface -> Visitor pattern)
+             + PageCreator (Factory pattern for generating the subtypes of pages)
+  * validators/ - the utility classes that contain the helper methods
+		      for the implementation: checking conditions, actions, updates
+			(for the current page, user and database)
+  * Main - the entry-point of the program
+  * Test - runs the checker
+* checker/
+	* input/ - contains the tests in JSON format
+	* ref/ - contains all reference output for the tests in JSON format
